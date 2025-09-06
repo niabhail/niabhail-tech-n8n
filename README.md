@@ -1,6 +1,6 @@
-# n8n Docker Enhanced
+# n8n with Shared Infrastructure
 
-Production-ready n8n automation platform with PostgreSQL database, designed to work with shared Caddy proxy infrastructure.
+Production-ready n8n automation platform with PostgreSQL database, integrated with niabhail-tech shared infrastructure.
 
 ## Features
 
@@ -31,8 +31,8 @@ Production-ready n8n automation platform with PostgreSQL database, designed to w
 
 2. **Clone and configure this project**:
    ```bash
-   git clone https://github.com/niabhail/n8n-docker-enhanced.git
-   cd n8n-docker-enhanced
+   git clone https://github.com/niabhail/niabhail-tech-n8n.git
+   cd niabhail-tech-n8n
    cp .env.example .env
    ```
 
@@ -107,20 +107,14 @@ This enhanced stack is designed to accommodate:
 - Vector databases for AI workflows
 - Additional automation services
 
-## Upstream Repo Notes  
+## Related Projects
 
-Self-hosting n8n requires technical knowledge, including:
+This n8n deployment is part of the niabhail-tech ecosystem:
 
-* Setting up and configuring servers and containers
-* Managing application resources and scaling
-* Securing servers and applications
-* Configuring n8n
+- **[niabhail-tech-shared-infra](https://github.com/niabhail/niabhail-tech-shared-infra)** - Shared Caddy proxy and networking (required)
+- **[niabhail-tech-site](https://github.com/niabhail/niabhail-tech-site)** - Main website
+- **niabhail-tech-n8n** - This automation platform
 
-Get up and running with n8n on the following platforms:
+## Support
 
-* [DigitalOcean tutorial](https://docs.n8n.io/hosting/server-setups/digital-ocean/)
-* [Hetzner Cloud tutorial](https://docs.n8n.io/hosting/server-setups/hetzner/)
-
-If you have questions after trying the tutorials, check out the [forums](https://community.n8n.io/).
-
-n8n recommends self-hosting for expert users. Mistakes can lead to data loss, security issues, and downtime. If you aren't experienced at managing servers, n8n recommends [n8n Cloud](https://n8n.io/cloud/).
+For n8n-specific issues, check the [official n8n documentation](https://docs.n8n.io/) and [community forums](https://community.n8n.io/).
