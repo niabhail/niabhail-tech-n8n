@@ -3,8 +3,8 @@
 ## Prerequisites
 
 - Docker and Docker Compose installed
-- Domain name with DNS configured
-- SSL email for Let's Encrypt certificates
+- [niabhail-tech-shared-infra](https://github.com/niabhail/niabhail-tech-shared-infra) deployed and running
+- Domain name with DNS configured (managed by shared Caddy proxy)
 
 ## Environment Configuration
 
@@ -17,13 +17,15 @@
    ```bash
    ./scripts/generate-keys.sh
    ```
+   
+   **Important**: Copy the generated keys exactly as shown to your .env file.
+   These keys are critical for n8n data encryption and JWT authentication.
 
 3. Edit .env with your configuration:
 
-- Update DOMAIN_NAME and SUBDOMAIN
-- Set SSL_EMAIL for certificates
-- Add generated encryption keys
-- Set secure passwords
+- Update DOMAIN_NAME and SUBDOMAIN (must match shared Caddy routing)
+- Add the generated N8N_ENCRYPTION_KEY and N8N_JWT_SECRET from step 2
+- Set secure passwords for POSTGRES_PASSWORD and N8N_DB_PASSWORD
 
 ## Production Deployment
 
@@ -44,6 +46,20 @@
 - Verify database connection: `docker-compose exec postgres psql -U n8n_app -d n8n_prod`
 
 ## Troubleshooting
+### Security Key Issues
+```bash
+# If deploy fails with key validation errors:
+# 1. Check keys exist in .env
+grep "N8N_ENCRYPTION_KEY\|N8N_JWT_SECRET" .env
+
+# 2. Regenerate if needed
+./scripts/generate-keys.sh
+
+# 3. Verify key length (32+ characters)
+echo ${#N8N_ENCRYPTION_KEY}
+echo ${#N8N_JWT_SECRET}
+```
+
 ### Database Issues
 ```bash
 # Check database logs
@@ -56,16 +72,16 @@ docker-compose exec postgres pg_isready -U postgres
 docker-compose exec postgres psql -U postgres -d n8n_prod
 ```
 
-### SSL Certificate Issues
+### Routing Issues
 ```bash
-# Check Caddy logs
-docker-compose logs caddy
+# Check if shared infrastructure is running
+docker network ls | grep niabhail-tech-network
 
 # Verify domain resolves
 nslookup your-domain.com
 
-# Check certificate status
-docker-compose exec caddy caddy list-certificates
+# SSL certificates are managed by shared Caddy proxy
+# Check shared infrastructure logs for SSL issues
 ```
 
 ### n8n Issues

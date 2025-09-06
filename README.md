@@ -1,34 +1,50 @@
 # n8n Docker Enhanced
 
-Production-ready n8n automation platform with PostgreSQL database, Caddy reverse proxy, and automatic SSL certificates.
+Production-ready n8n automation platform with PostgreSQL database, designed to work with shared Caddy proxy infrastructure.
 
 ## Features
 
 - **PostgreSQL Database**: Scalable database instead of SQLite
-- **Automatic SSL**: Let's Encrypt certificates via Caddy
+- **Shared Infrastructure**: Uses niabhail-tech-network and shared Caddy proxy
 - **Health Checks**: Service dependency management
 - **Security**: Dedicated database user, encryption keys
 - **Production Ready**: Logging, monitoring, restart policies
 - **YAML Anchors**: Maintainable configuration
 - **Enterprise Features**: Connection limits, extensions, proper permissions
 
+## Prerequisites
+
+**IMPORTANT**: This project requires [niabhail-tech-shared-infra](https://github.com/niabhail/niabhail-tech-shared-infra) to be deployed first, which provides:
+- Shared Caddy reverse proxy with automatic SSL
+- niabhail-tech-network Docker network  
+- Centralized routing configuration
+
 ## Quick Start
 
-1. **Clone and configure**:
+1. **Deploy shared infrastructure first**:
+   ```bash
+   # Deploy https://github.com/niabhail/niabhail-tech-shared-infra
+   git clone https://github.com/niabhail/niabhail-tech-shared-infra.git
+   cd niabhail-tech-shared-infra
+   # Follow deployment instructions
+   ```
+
+2. **Clone and configure this project**:
    ```bash
    git clone https://github.com/niabhail/n8n-docker-enhanced.git
    cd n8n-docker-enhanced
    cp .env.example .env
    ```
 
-2. **Generate security keys** :
+3. **Generate security keys**:
     ```bash
     ./scripts/generate-keys.sh
     ```
+    Copy the output exactly to your `.env` file - these are critical for data security.
 
-3. **Edit .env file** with your domain and generated keys
+4. **Edit .env file** with your domain, generated keys, and database passwords
 
-4. **Deploy**:
+5. **Deploy n8n**:
     ```bash
     ./scripts/deploy.sh
     ```
@@ -36,17 +52,18 @@ Production-ready n8n automation platform with PostgreSQL database, Caddy reverse
 ## Configuration
 Edit .env file with your settings:
 
-- Domain configuration (DOMAIN_NAME, SUBDOMAIN)
+- Domain configuration (DOMAIN_NAME, SUBDOMAIN) - must match shared Caddy routing
 - Database passwords (secure these!)
 - Security keys (use generate-keys.sh)
 - Feature toggles (diagnostics, personalization)
 
 ## Architecture
 
-- Caddy: Reverse proxy with automatic SSL
-- n8n: Workflow automation engine
-- PostgreSQL: Production database with dedicated user
-- Docker Compose: Orchestration with health checks and dependencies
+- **Shared Infrastructure**: Caddy reverse proxy with automatic SSL (external)
+- **n8n**: Workflow automation engine
+- **PostgreSQL**: Production database with dedicated user
+- **Docker Compose**: Orchestration with health checks and dependencies
+- **Network**: Uses external niabhail-tech-network for routing
 
 ## Monitoring
 ```bash
@@ -73,13 +90,14 @@ docker-compose exec postgres psql -U postgres -d n8n_prod
 
 ## Differences from Original
 
-- PostgreSQL instead of SQLite
-- Health checks and service dependencies
-- Enhanced security configuration
-- Production logging and monitoring
-- YAML anchors for maintainable configuration
-- Automated database initialization
-- Deployment and utility scripts
+- **PostgreSQL instead of SQLite**
+- **Shared infrastructure integration** - uses external Caddy and network
+- **Health checks and service dependencies**
+- **Enhanced security configuration**
+- **Production logging and monitoring**
+- **YAML anchors for maintainable configuration**
+- **Automated database initialization**
+- **Deployment and utility scripts**
 
 ## Future Enhancements
 This enhanced stack is designed to accommodate:
