@@ -23,14 +23,20 @@ Production-ready n8n automation platform with PostgreSQL database, integrated wi
 
 1. **Deploy shared infrastructure first**:
    ```bash
-   # Deploy https://github.com/niabhail/niabhail-tech-shared-infra
+   # Deploy shared infrastructure (if not already deployed)
+   sudo mkdir -p /opt/niabhail-platform
+   cd /opt/niabhail-platform
    git clone https://github.com/niabhail/niabhail-tech-shared-infra.git
    cd niabhail-tech-shared-infra
-   # Follow deployment instructions
+   ./deploy.sh your-domain.com
+   
+   # Verify shared infrastructure is running
+   docker network ls | grep niabhail-tech-network
    ```
 
 2. **Clone and configure this project**:
    ```bash
+   cd /opt/niabhail-platform
    git clone https://github.com/niabhail/niabhail-tech-n8n.git
    cd niabhail-tech-n8n
    cp .env.example .env
