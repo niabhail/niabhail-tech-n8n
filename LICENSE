@@ -1,6 +1,7 @@
 MIT License
 
-Copyright (c) 2022 n8n - Workflow Automation
+Portions Copyright (c) 2022 n8n - Workflow Automation (original Docker setup)
+Copyright (c) 2025 niabhail (modifications and shared infrastructure integration)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
