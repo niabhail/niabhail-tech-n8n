@@ -58,7 +58,7 @@ Production-ready n8n automation platform with PostgreSQL database, integrated wi
 ## Configuration
 Edit .env file with your settings:
 
-- Domain configuration (DOMAIN_NAME, SUBDOMAIN) - must match shared Caddy routing
+- Domain configuration (N8N_DOMAIN) - must match shared Caddy routing
 - Database passwords (secure these!)
 - Security keys (use generate-keys.sh)
 - Feature toggles (diagnostics, personalization)
@@ -74,16 +74,16 @@ Edit .env file with your settings:
 ## Monitoring
 ```bash
 # Check status
-docker-compose ps
+docker compose ps
 
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Health check
-docker-compose exec n8n wget -qO- http://localhost:5678/healthz
+docker compose exec niabhail-tech-n8n-app wget -qO- http://localhost:5678/healthz
 
 # Database access
-docker-compose exec postgres psql -U postgres -d n8n_prod
+docker compose exec niabhail-tech-n8n-postgres psql -U postgres -d n8n_prod
 ```
 
 ## Security Features

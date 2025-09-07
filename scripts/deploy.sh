@@ -22,8 +22,8 @@ fi
 source ".env"
 
 echo "✓ Environment configuration loaded"
-echo "  Domain: ${SUBDOMAIN}.${DOMAIN_NAME}"
-echo "  Project: ${COMPOSE_PROJECT_NAME:-n8n}"
+echo "  Domain: ${N8N_DOMAIN}"
+echo "  Project: niabhail-tech-n8n"
 
 # Validate required environment variables
 required_vars=("POSTGRES_PASSWORD" "N8N_DB_PASSWORD" "N8N_ENCRYPTION_KEY" "N8N_JWT_SECRET")
@@ -67,26 +67,26 @@ fi
 echo "✓ niabhail-tech-network found"
 
 # Validate domain configuration
-if [ -z "$DOMAIN_NAME" ] || [ -z "$SUBDOMAIN" ]; then
-    echo "❌ Error: DOMAIN_NAME and SUBDOMAIN must be set"
-    echo "   These should match your shared Caddy routing configuration"
+if [ -z "$N8N_DOMAIN" ]; then
+    echo "❌ Error: N8N_DOMAIN must be set"
+    echo "   This should match your shared Caddy routing configuration"
     exit 1
 fi
 
 echo "✓ Shared infrastructure dependencies verified"
-echo "  Target URL: https://${SUBDOMAIN}.${DOMAIN_NAME}"
+echo "  Target URL: https://${N8N_DOMAIN}"
 echo "  NOTE: Ensure routing rules are configured in shared Caddy proxy"
 
 # Initialize database first
 echo "🔄 Starting database initialization..."
-docker-compose up -d postgres
+docker compose up -d postgres
 sleep 10
 
 # Wait for database to be healthy
 echo "⏳ Waiting for database to be ready..."
 timeout=60
 while [ $timeout -gt 0 ]; do
-    if docker-compose exec postgres pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" >/dev/null 2>&1; then
+    if docker compose exec postgres pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB" >/dev/null 2>&1; then
         echo "✓ Database is ready"
         break
     fi
@@ -96,25 +96,25 @@ done
 
 if [ $timeout -le 0 ]; then
     echo "❌ Database failed to start within 60 seconds"
-    docker-compose logs postgres
+    docker compose logs postgres
     exit 1
 fi
 
 # Deploy full stack
 echo "🚀 Deploying complete stack..."
-docker-compose up -d
+docker compose up -d
 
 echo "📊 Checking service health..."
 sleep 10
-docker-compose ps
+docker compose ps
 
 echo "🎉 Deployment complete!"
 echo ""
-echo "Your n8n instance should be available at: https://${SUBDOMAIN}.${DOMAIN_NAME}"
+echo "Your n8n instance should be available at: https://${N8N_DOMAIN}"
 echo "  ⚠️  IMPORTANT: Configure routing in shared Caddy proxy if not already done"
 echo ""
 echo "Next steps:"
-echo "  1. Configure Caddy routing: ${SUBDOMAIN}.${DOMAIN_NAME} -> n8n:5678"
-echo "  2. Test access: curl -I https://${SUBDOMAIN}.${DOMAIN_NAME}"
-echo "  3. Monitor logs: docker-compose logs -f"
-echo "  4. Check status: docker-compose ps"
+echo "  1. Configure Caddy routing: ${N8N_DOMAIN} -> n8n:5678"
+echo "  2. Test access: curl -I https://${N8N_DOMAIN}"
+echo "  3. Monitor logs: docker compose logs -f"
+echo "  4. Check status: docker compose ps"
